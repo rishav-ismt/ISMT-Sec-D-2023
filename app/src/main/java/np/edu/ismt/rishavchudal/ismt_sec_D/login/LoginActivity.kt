@@ -10,9 +10,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import np.edu.ismt.rishavchudal.ismt_sec_D.Constants
 import np.edu.ismt.rishavchudal.ismt_sec_D.R
+import np.edu.ismt.rishavchudal.ismt_sec_D.TestDatabase
 import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.DashboardActivity
 import np.edu.ismt.rishavchudal.ismt_sec_D.databinding.ActivityLoginBinding
 import np.edu.ismt.rishavchudal.ismt_sec_D.home_screen.HomeScreenActivity
+import java.lang.Exception
 import kotlin.math.log
 
 class LoginActivity : AppCompatActivity() {
@@ -54,29 +56,39 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                //TODO Do remote or local authentication
-                val loginData = Login(email, password)
+                //TODO Do remote authentication
 
-                //Writing to SharedPref
-                val sharedPreferences = getSharedPreferences(
-                    Constants.FILE_SHARED_PREF_LOGIN,
-                    Context.MODE_PRIVATE
-                )
-                val sharedPrefEditor = sharedPreferences.edit()
-                sharedPrefEditor.putBoolean(
-                    Constants.KEY_IS_LOGGED_IN,
-                    true
-                )
-                sharedPrefEditor.apply()
+                /**
+                 * Local Authentication via db
+                 */
+                val testDatabase = TestDatabase.getInstance(applicationContext)
+                val userDao = testDatabase.getUserDao()
+
+                Thread {
+                    try {
+                        val userInDb = userDao.getSpecificUser(email, password)
+                        if (userInDb == null) {
+                            runOnUiThread {
+                                showToast("Email or Password is incorrect")
+                            }
+                        } else {
+                            runOnUiThread {
+                                showToast("Logged In Successfully")
+                            }
+                            onSuccessfulLogin()
+                        }
+                    } catch (exception: Exception) {
+                        exception.printStackTrace()
+                        runOnUiThread {
+                            showToast("Couldn't login. Please try again...")
+                        }
+                    }
+                }.start()
 
 
-                val intent = Intent(this, DashboardActivity::class.java)
-                intent.putExtra(Constants.KEY_EMAIL, email)
-                intent.putExtra(Constants.KEY_PASSWORD, password)
 
-                intent.putExtra(Constants.KEY_LOGIN_DATA, loginData)
-                startActivity(intent)
-                finish()
+
+
             }
         }
 
@@ -106,5 +118,35 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i(tag,"onDestroy...")
+    }
+
+    private fun onSuccessfulLogin() {
+        val email =  loginViewBinding.etEmail.text.toString().trim()
+        val password = loginViewBinding.etPassword.text.toString().trim()
+        val loginData = Login(email, password)
+
+        //Writing to SharedPref
+        val sharedPreferences = getSharedPreferences(
+            Constants.FILE_SHARED_PREF_LOGIN,
+            Context.MODE_PRIVATE
+        )
+        val sharedPrefEditor = sharedPreferences.edit()
+        sharedPrefEditor.putBoolean(
+            Constants.KEY_IS_LOGGED_IN,
+            true
+        )
+        sharedPrefEditor.apply()
+
+        val intent = Intent(this, DashboardActivity::class.java)
+        intent.putExtra(Constants.KEY_EMAIL, email)
+        intent.putExtra(Constants.KEY_PASSWORD, password)
+
+        intent.putExtra(Constants.KEY_LOGIN_DATA, loginData)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
