@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import np.edu.ismt.rishavchudal.ismt_sec_D.Constants
 import np.edu.ismt.rishavchudal.ismt_sec_D.R
 import np.edu.ismt.rishavchudal.ismt_sec_D.TestDatabase
+import np.edu.ismt.rishavchudal.ismt_sec_D.User
 import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.DashboardActivity
 import np.edu.ismt.rishavchudal.ismt_sec_D.databinding.ActivityLoginBinding
 import np.edu.ismt.rishavchudal.ismt_sec_D.home_screen.HomeScreenActivity
@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
                             runOnUiThread {
                                 showToast("Logged In Successfully")
                             }
-                            onSuccessfulLogin()
+                            onSuccessfulLogin(userInDb)
                         }
                     } catch (exception: Exception) {
                         exception.printStackTrace()
@@ -84,11 +84,6 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }.start()
-
-
-
-
-
             }
         }
 
@@ -120,11 +115,7 @@ class LoginActivity : AppCompatActivity() {
         Log.i(tag,"onDestroy...")
     }
 
-    private fun onSuccessfulLogin() {
-        val email =  loginViewBinding.etEmail.text.toString().trim()
-        val password = loginViewBinding.etPassword.text.toString().trim()
-        val loginData = Login(email, password)
-
+    private fun onSuccessfulLogin(user: User) {
         //Writing to SharedPref
         val sharedPreferences = getSharedPreferences(
             Constants.FILE_SHARED_PREF_LOGIN,
@@ -138,10 +129,7 @@ class LoginActivity : AppCompatActivity() {
         sharedPrefEditor.apply()
 
         val intent = Intent(this, DashboardActivity::class.java)
-        intent.putExtra(Constants.KEY_EMAIL, email)
-        intent.putExtra(Constants.KEY_PASSWORD, password)
-
-        intent.putExtra(Constants.KEY_LOGIN_DATA, loginData)
+        intent.putExtra(Constants.KEY_LOGIN_DATA, user)
         startActivity(intent)
         finish()
     }
