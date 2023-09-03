@@ -1,4 +1,4 @@
-package np.edu.ismt.rishavchudal.ismt_sec_D.dashboard
+package np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import np.edu.ismt.rishavchudal.ismt_sec_D.R
 
-class HomeFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,11 +18,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) = HomeFragment()
+        fun newInstance() = ProfileFragment()
     }
 }
