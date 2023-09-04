@@ -1,4 +1,4 @@
-package np.edu.ismt.rishavchudal.ismt_sec_D
+package np.edu.ismt.rishavchudal.ismt_sec_D.database
 
 import androidx.room.Dao
 import androidx.room.Insert

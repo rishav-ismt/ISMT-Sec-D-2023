@@ -4,10 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.room.Room
-import np.edu.ismt.rishavchudal.ismt_sec_D.R
-import np.edu.ismt.rishavchudal.ismt_sec_D.TestDatabase
-import np.edu.ismt.rishavchudal.ismt_sec_D.User
+import np.edu.ismt.rishavchudal.ismt_sec_D.database.TestDatabase
+import np.edu.ismt.rishavchudal.ismt_sec_D.database.User
 import np.edu.ismt.rishavchudal.ismt_sec_D.databinding.ActivitySignUpBinding
 import np.edu.ismt.rishavchudal.ismt_sec_D.home_screen.HomeScreenActivity
 

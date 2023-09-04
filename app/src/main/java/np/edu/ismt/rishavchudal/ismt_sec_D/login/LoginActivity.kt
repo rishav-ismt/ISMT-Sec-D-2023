@@ -4,18 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import np.edu.ismt.rishavchudal.ismt_sec_D.Constants
-import np.edu.ismt.rishavchudal.ismt_sec_D.R
-import np.edu.ismt.rishavchudal.ismt_sec_D.TestDatabase
-import np.edu.ismt.rishavchudal.ismt_sec_D.User
+import np.edu.ismt.rishavchudal.ismt_sec_D.database.TestDatabase
+import np.edu.ismt.rishavchudal.ismt_sec_D.database.User
 import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.DashboardActivity
 import np.edu.ismt.rishavchudal.ismt_sec_D.databinding.ActivityLoginBinding
 import np.edu.ismt.rishavchudal.ismt_sec_D.home_screen.HomeScreenActivity
 import java.lang.Exception
-import kotlin.math.log
 
 class LoginActivity : AppCompatActivity() {
     private val tag = "LoginActivity"

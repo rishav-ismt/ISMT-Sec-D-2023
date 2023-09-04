@@ -16,12 +16,11 @@ class ShopFragment : Fragment() {
     private val startAddItemActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (it.resultCode == 1) {
-
+        if (it.resultCode == AddItemActivity.RESULT_CODE_COMPLETE) {
+            //TODO fetch data from db again and populate
         } else {
-
+            // TODO do nothing
         }
-        //TODO work based on the result code
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +32,7 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        shopBinding = FragmentShopBinding.inflate(layoutInflater)
+        shopBinding = FragmentShopBinding.inflate(inflater, container, false)
         setUpViews()
         return shopBinding.root
     }

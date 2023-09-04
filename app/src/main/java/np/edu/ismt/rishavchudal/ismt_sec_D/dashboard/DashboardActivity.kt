@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import np.edu.ismt.rishavchudal.ismt_sec_D.Constants
 import np.edu.ismt.rishavchudal.ismt_sec_D.R
-import np.edu.ismt.rishavchudal.ismt_sec_D.User
+import np.edu.ismt.rishavchudal.ismt_sec_D.database.User
 import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.fragments.HomeFragment
 import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.fragments.ProfileFragment
 import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.fragments.ShopFragment
