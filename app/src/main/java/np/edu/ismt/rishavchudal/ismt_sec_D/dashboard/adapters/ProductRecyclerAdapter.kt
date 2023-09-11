@@ -5,20 +5,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import np.edu.ismt.rishavchudal.ismt_sec_D.R
 import np.edu.ismt.rishavchudal.ismt_sec_D.database.Product
 
 class ProductRecyclerAdapter(
-    private val products: List<Product>
+    private val products: List<Product>,
+    private val listener: ProductAdapterListener
 ): RecyclerView.Adapter<ProductRecyclerAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        var itemRootLayout: ConstraintLayout
         var itemImage: ImageView
         var itemTitle: TextView
         var itemDescription: TextView
 
         init {
+            itemRootLayout = view.findViewById(R.id.item_root_layout)
             itemImage = view.findViewById(R.id.iv_item_image)
             itemTitle = view.findViewById(R.id.tv_item_title)
             itemDescription = view.findViewById(R.id.tv_item_description)
@@ -47,5 +51,12 @@ class ProductRecyclerAdapter(
         //TODO to populate image
         holder.itemTitle.text = products[position].title
         holder.itemDescription.text = products[position].description
+        holder.itemRootLayout.setOnClickListener {
+            listener.onItemClicked(products[position], position)
+        }
+    }
+
+    interface ProductAdapterListener {
+        fun onItemClicked(product: Product, position: Int)
     }
 }

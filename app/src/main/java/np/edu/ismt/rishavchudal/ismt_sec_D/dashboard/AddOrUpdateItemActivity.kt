@@ -1,16 +1,14 @@
 package np.edu.ismt.rishavchudal.ismt_sec_D.dashboard
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import np.edu.ismt.rishavchudal.ismt_sec_D.R
 import np.edu.ismt.rishavchudal.ismt_sec_D.database.Product
 import np.edu.ismt.rishavchudal.ismt_sec_D.database.TestDatabase
 import np.edu.ismt.rishavchudal.ismt_sec_D.databinding.ActivityAddItemBinding
 import java.lang.Exception
 
-class AddItemActivity : AppCompatActivity() {
+class AddOrUpdateItemActivity : AppCompatActivity() {
     private lateinit var addItemBinding: ActivityAddItemBinding
 
     companion object {
@@ -84,5 +82,9 @@ class AddItemActivity : AppCompatActivity() {
     private fun setResultWithFinish(resultCode: Int) {
         setResult(resultCode)
         finish()
+    }
+
+    override fun onBackPressed() {
+        setResultWithFinish(RESULT_CODE_CANCEL)
     }
 }

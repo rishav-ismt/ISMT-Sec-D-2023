@@ -7,20 +7,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import np.edu.ismt.rishavchudal.ismt_sec_D.R
-import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.AddItemActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import np.edu.ismt.rishavchudal.ismt_sec_D.UiUtility
+import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.AddOrUpdateItemActivity
+import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.DetailViewActivity
+import np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.adapters.ProductRecyclerAdapter
+import np.edu.ismt.rishavchudal.ismt_sec_D.database.Product
+import np.edu.ismt.rishavchudal.ismt_sec_D.database.TestDatabase
 import np.edu.ismt.rishavchudal.ismt_sec_D.databinding.FragmentShopBinding
 
-class ShopFragment : Fragment() {
+class ShopFragment : Fragment(), ProductRecyclerAdapter.ProductAdapterListener {
     private lateinit var shopBinding: FragmentShopBinding
+    private lateinit var productRecyclerAdapter: ProductRecyclerAdapter
+
     private val startAddItemActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (it.resultCode == AddItemActivity.RESULT_CODE_COMPLETE) {
+        if (it.resultCode == AddOrUpdateItemActivity.RESULT_CODE_COMPLETE) {
             //TODO fetch data from db again and populate
+            setUpRecyclerView()
         } else {
             // TODO do nothing
+            UiUtility.showToast(requireActivity(), "Add Item Cancelled...")
         }
+    }
+
+    private val startDetailViewActivity = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +63,45 @@ class ShopFragment : Fragment() {
 
     private fun setUpFloatingActionButton() {
         shopBinding.fabAdd.setOnClickListener {
-            val intent = Intent(requireActivity(), AddItemActivity::class.java)
+            val intent = Intent(requireActivity(), AddOrUpdateItemActivity::class.java)
             startAddItemActivity.launch(intent)
         }
     }
 
     private fun setUpRecyclerView() {
-        //TODO
+        //TODO fetch data from source (remote server)
+        val testDatabase = TestDatabase.getInstance(requireActivity().applicationContext)
+        val productDao = testDatabase.getProductDao()
+
+        Thread {
+            try {
+                val products = productDao.getAllProducts()
+                if (products.isEmpty()) {
+                    requireActivity().runOnUiThread {
+                        UiUtility.showToast(requireActivity(), "No Items Added...")
+                    }
+                } else {
+                    requireActivity().runOnUiThread {
+                        populateRecyclerView(products)
+                    }
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                requireActivity().runOnUiThread {
+                    UiUtility.showToast(requireActivity(), "Couldn't load items.")
+                }
+            }
+        }.start()
+    }
+
+    private fun populateRecyclerView(products: List<Product>) {
+        productRecyclerAdapter = ProductRecyclerAdapter(products, this)
+        shopBinding.rvShop.adapter = productRecyclerAdapter
+        shopBinding.rvShop.layoutManager = LinearLayoutManager(requireActivity())
+    }
+
+    override fun onItemClicked(product: Product, position: Int) {
+        val intent = Intent(requireActivity(), DetailViewActivity::class.java)
+        startDetailViewActivity.launch(intent)
     }
 }
