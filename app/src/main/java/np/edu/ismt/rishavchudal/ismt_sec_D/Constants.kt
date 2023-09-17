@@ -7,5 +7,7 @@ class Constants {
         const val KEY_LOGIN_DATA = "loginData"
         const val FILE_SHARED_PREF_LOGIN = "sharedPrefLogin"
         const val KEY_IS_LOGGED_IN = "isLoggedIn"
+        const val KEY_PRODUCT = "product"
+        const val KEY_PRODUCT_POSITION = "position"
     }
 }
