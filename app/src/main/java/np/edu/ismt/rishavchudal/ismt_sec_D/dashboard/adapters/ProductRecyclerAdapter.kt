@@ -1,5 +1,9 @@
 package np.edu.ismt.rishavchudal.ismt_sec_D.dashboard.adapters
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,12 +11,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import np.edu.ismt.rishavchudal.ismt_sec_D.BitmapScalar
 import np.edu.ismt.rishavchudal.ismt_sec_D.R
 import np.edu.ismt.rishavchudal.ismt_sec_D.database.Product
+import java.io.IOException
 
 class ProductRecyclerAdapter(
     private val products: List<Product>,
-    private val listener: ProductAdapterListener
+    private val listener: ProductAdapterListener,
+    private val context: Context
 ): RecyclerView.Adapter<ProductRecyclerAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -48,7 +55,23 @@ class ProductRecyclerAdapter(
         holder: ProductViewHolder,
         position: Int
     ) {
-        //TODO to populate image
+        holder.itemImage.post {
+            var bitmap: Bitmap?
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(
+                    context.contentResolver,
+                    Uri.parse(products[position].image)
+                )
+                bitmap = BitmapScalar.stretchToFill(
+                    bitmap,
+                    holder.itemImage.width,
+                    holder.itemImage.height
+                )
+                holder.itemImage.setImageBitmap(bitmap)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
         holder.itemTitle.text = products[position].title
         holder.itemDescription.text = products[position].description
         holder.itemRootLayout.setOnClickListener {
