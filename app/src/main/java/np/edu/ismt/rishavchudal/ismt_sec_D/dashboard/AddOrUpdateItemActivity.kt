@@ -57,6 +57,11 @@ class AddOrUpdateItemActivity : AppCompatActivity() {
         }
     }
 
+    private val startMapActivityForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) {
+        //TODO Handle data
+    }
+
     companion object {
         const val RESULT_CODE_COMPLETE = 1001
         const val RESULT_CODE_CANCEL = 1002
@@ -83,6 +88,10 @@ class AddOrUpdateItemActivity : AppCompatActivity() {
 
         addItemBinding.ivAddImage.setOnClickListener {
             handleImageAddButtonClicked()
+        }
+
+        addItemBinding.mbLocation.setOnClickListener {
+            startMapActivity()
         }
 
         addItemBinding.mbSubmit.setOnClickListener {
@@ -251,6 +260,11 @@ class AddOrUpdateItemActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         })
+    }
+
+    private fun startMapActivity() {
+        val intent = Intent(this, MapsActivity::class.java)
+        startMapActivityForResult.launch(intent)
     }
 
     override fun onBackPressed() {
